@@ -1,3 +1,5 @@
+# Convert your favourite blog into audio in 13 lines of Python
+
 Over the years, I have become more of a listener and less of a reader in the conventional sense. While services like Audible and Scribd provide quality audiobooks, ardent reader of longform journalism like myself have no such source. This prompted me to put together a script to generate audio versions for some of my favourite blogs. The code provided has not been perfected and could definitely be improved upon but it does illustrate the idea - scrape the relevant text and use text to speech to generate fairly good quality listening material.
 
 Here I provide the code to extract links from an aggregator. For educational purpose, aldaily.com is used. Please do not misuse the code.

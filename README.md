@@ -1,37 +1,42 @@
-## Welcome to GitHub Pages
+Over the years, I have become more of a listener and less of a reader in the conventional sense. While services like Audible and Scribd provide quality audiobooks, ardent reader of longform journalism like myself have no such source. This prompted me to put together a script to generate audio versions for some of my favourite blogs. The code provided has not been perfected and could definitely be improved upon but it does illustrate the idea - scrape the relevant text and use text to speech to generate fairly good quality listening material.
 
-You can use the [editor on GitHub](https://github.com/josejeffy/josejeffy.github.com/edit/main/README.md) to maintain and preview the content for your website in Markdown files.
+Here I provide the code to extract links from an aggregator. For educational purpose, aldaily.com is used. Please do not misuse the code.
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+```python
+# import libraries
+from bs4 import BeautifulSoup
+import requests, pyttsx3
 
-### Markdown
+# initialize text to speech engine and a counter variable
+# pyttsx3 is used as it offers an offline conversion
+engine = pyttsx3.init()
+count = 0
 
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
+# fetch content from url and parse html using BeautifulSoup
+html = BeautifulSoup(requests.get('https://www.aldaily.com/').content, 
+'html.parser')
 
-```markdown
-Syntax highlighted code block
+# extract the first 10 aggregated links
+# change the selection query for your site of choice
+links = [a['href'] for a in html.select('div p a')][:10]
 
-# Header 1
-## Header 2
-### Header 3
+# loop through each link
+for link in links:
+    # fetch the article and parse the html content
+    article = BeautifulSoup(requests.get(link).content, 'html.parser')
 
-- Bulleted
-- List
+    # uses a quick and easy way to extract the content using 'p' tags
+    # modify it appropriately or use a library to get clean text
+    text = " ".join([p.getText() for p in article.select('p')])
 
-1. Numbered
-2. List
+    # filters out smaller or truncated articles using a character count of 5000 as threshold
+    if len(text) > 5*1000:
+        # save the extracted text as an audio file
+        engine.save_to_file(text,f'article_{count}.mp3')
+        engine.runAndWait()
 
-**Bold** and _Italic_ and `Code` text
+        # increment the counter used as suffix
+        count += 1
 
-[Link](url) and ![Image](src)
-```
 
-For more details see [Basic writing and formatting syntax](https://docs.github.com/en/github/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax).
-
-### Jekyll Themes
-
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/josejeffy/josejeffy.github.com/settings/pages). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
-
-### Support or Contact
-
-Having trouble with Pages? Check out our [documentation](https://docs.github.com/categories/github-pages-basics/) or [contact support](https://support.github.com/contact) and we’ll help you sort it out.
+``` 

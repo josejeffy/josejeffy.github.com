@@ -1,6 +1,6 @@
 {
-    "name": "excel",
-    "short_name": "excel",
+    "name": "website",
+    "short_name": "website",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

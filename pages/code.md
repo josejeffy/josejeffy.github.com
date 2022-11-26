@@ -1,7 +1,7 @@
 # In index.html
 
-! indexHTMLScript.jpg
+! indexHTMLScript.JPG
 
 # In md2html.js
 
-! md2htmlScript.jpg
+! md2htmlScript.JPG

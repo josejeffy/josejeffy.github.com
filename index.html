@@ -7,7 +7,7 @@
     <script src="md2html.js"></script>
     <style>
         #sidebar{
-            width: 15%;
+            min-width: 200px;
             height: 100vh;
             overflow-y: scroll;
             border-right: 1px solid grey;
@@ -15,15 +15,15 @@
             padding-left: 3rem;
         }
         #mainpanel{
-            width: 80%;
+            width: calc(100% - 200px);
             height: 95vh;
             overflow-y: scroll;
             padding-left: 2rem;
             padding-right: 5rem;
         }
         #page{
-            display: flex;
-        }
+                display: flex;
+            }
         img{
             max-height: 400px;
         }
@@ -46,6 +46,9 @@
     </style>
 </head>
 <body>
+    <div id="message">
+        Currently the page is not optimized for screens with less than 700px in width
+    </div>
     <div id="page">
         <div id="sidebar"></div>
         <div id="mainpanel"></div>

@@ -54062,7 +54062,7 @@ this.c.toString
 s=!0
 s=s?B.ux:r
 s=A.a2J(A.a([n,new A.zE(new A.W5(new A.Ox(this),2,!0,!0,!0,r),r,B.aS,!1,r,r,s,!0,r,2,B.at,B.C3,r,B.aI,r)],p),B.dm)
-return new A.rZ(new A.oZ(q,o,B.wo,!0,new A.Gp(r,r,1/0,56),r),A.a2J(A.a([A.nj(r,10,r),A.a6R(A.a([new A.xm(new A.p_("images/profilepic.jpg"),100,r)],p),B.ev,B.AP,B.fg),A.a2J(A.a([A.a3A("Page under construction",A.tN(r,r,B.wr,r,r,r,r,r,r,r,r,40,r,r,r,r,r,!0,r,r,r,r,r,r,r,r))],p),B.dm)],p),B.dm),new A.yo(s,r),r)}}
+return new A.rZ(new A.oZ(q,o,B.wo,!0,new A.Gp(r,r,1/0,56),r),A.a2J(A.a([A.nj(r,10,r),A.a6R(A.a([new A.xm(new A.p_("assets/images/profilepic.jpg"),100,r)],p),B.ev,B.AP,B.fg),A.a2J(A.a([A.a3A("Page under construction",A.tN(r,r,B.wr,r,r,r,r,r,r,r,r,40,r,r,r,r,r,!0,r,r,r,r,r,r,r,r))],p),B.dm)],p),B.dm),new A.yo(s,r),r)}}
 A.Ox.prototype={
 $2(a,b){return new A.mB(A.a3A(this.a.c[b],null),null)},
 $S:319}

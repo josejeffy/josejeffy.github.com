@@ -1,58 +1,76 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <!--
-    If you are serving your web app in a path other than the root, change the
-    href value below to reflect the base path you are serving from.
-
-    The path provided below has to start and end with a slash "/" in order for
-    it to work correctly.
-
-    For more details:
-    * https://developer.mozilla.org/en-US/docs/Web/HTML/Element/base
-
-    This is a placeholder for base href that will be replaced by the value of
-    the `--base-href` argument provided to `flutter build`.
-  -->
-  <base href="/">
-
-  <meta charset="UTF-8">
-  <meta content="IE=Edge" http-equiv="X-UA-Compatible">
-  <meta name="description" content="A new Flutter project.">
-
-  <!-- iOS meta tags & icons -->
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black">
-  <meta name="apple-mobile-web-app-title" content="website">
-  <link rel="apple-touch-icon" href="icons/Icon-192.png">
-
-  <!-- Favicon -->
-  <link rel="icon" type="image/png" href="favicon.png"/>
-
-  <title>website</title>
-  <link rel="manifest" href="manifest.json">
-
-  <script>
-    // The value below is injected by flutter build, do not touch.
-    var serviceWorkerVersion = '1139893275';
-  </script>
-  <!-- This script adds the flutter initialization JS code -->
-  <script src="flutter.js" defer></script>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="md2html.js"></script>
+    <style>
+        #sidebar{
+            width: 15%;
+            height: 100vh;
+            overflow-y: scroll;
+            border-right: 1px solid grey;
+            background-color: antiquewhite;
+            padding-left: 3rem;
+        }
+        #mainpanel{
+            width: 80%;
+            height: 95vh;
+            overflow-y: scroll;
+            padding-left: 2rem;
+            padding-right: 5rem;
+        }
+        #page{
+            display: flex;
+        }
+        img{
+            max-height: 400px;
+        }
+        *{
+            font-family: monospace;
+            font-size: 1.2rem;
+            line-height: 200%;
+        }
+        h1{
+            font-size: 2rem;
+        }
+        li{
+            margin-left: 2rem;
+        }
+        a{
+            text-decoration: none;
+            font-weight: 700;
+            color: brown;
+        }
+    </style>
 </head>
 <body>
-  <script>
-    window.addEventListener('load', function(ev) {
-      // Download main.dart.js
-      _flutter.loader.loadEntrypoint({
-        serviceWorker: {
-          serviceWorkerVersion: serviceWorkerVersion,
+    <div id="page">
+        <div id="sidebar"></div>
+        <div id="mainpanel"></div>
+    </div>
+    <script>
+        loadMD = (file,target) => {
+            fetch(`/pages/${file}.md`)
+            .then(response=>response.text())
+            .then(md=>document.getElementById(target).innerHTML = generateHTML(md))
         }
-      }).then(function(engineInitializer) {
-        return engineInitializer.initializeEngine();
-      }).then(function(appRunner) {
-        return appRunner.runApp();
-      });
-    });
-  </script>
+        loadMainPanel = () =>{
+            let endpoint = window.location.hash.slice(2) || 'home'
+            loadMD(endpoint,"mainpanel")
+        }
+        reload = () => {
+            loadMainPanel()
+            loadMD('sidebar',"sidebar")
+        }
+
+        reload()
+
+        addEventListener('hashchange', (event) => reload());
+
+    </script>
+    
 </body>
 </html>

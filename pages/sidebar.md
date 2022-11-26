@@ -1,3 +1,3 @@
 [Home] home
-[About_Jeffy_Joseph] about
+[About_me] about
 [Site_generator] code

@@ -1,4 +1,5 @@
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -6,45 +7,59 @@
     <title>Jeffy Joseph</title>
     <script src="md2html.js"></script>
     <style>
-        #sidebar{
+        #sidebar {
             min-width: 200px;
             height: 95vh;
-            overflow-y: scroll;
+            overflow-y: hidden;
             border-right: 1px solid grey;
             background-color: antiquewhite;
             padding-left: 3rem;
         }
-        #mainpanel{
+
+        #mainpanel {
             width: calc(100% - 200px);
             height: 95vh;
             overflow-y: scroll;
             padding-left: 2rem;
             padding-right: 5rem;
         }
-        #page{
-                display: flex;
-            }
-        img{
+        body{
+            overflow-y: hidden;
+        }
+        #page {
+            display: flex;
+        }
+
+        #message {
+            height: 5vh;
+        }
+
+        img {
             max-height: 400px;
         }
-        *{
+
+        * {
             font-family: monospace;
             font-size: 1.2rem;
             line-height: 200%;
         }
-        h1{
+
+        h1 {
             font-size: 2rem;
         }
-        li{
+
+        li {
             margin-left: 2rem;
         }
-        a{
+
+        a {
             text-decoration: none;
             font-weight: 700;
             color: brown;
         }
     </style>
 </head>
+
 <body>
     <div id="message">
         Currently the page is not optimized for screens with less than 700px in width
@@ -54,18 +69,18 @@
         <div id="mainpanel"></div>
     </div>
     <script>
-        loadMD = (file,target) => {
+        loadMD = (file, target) => {
             fetch(`/pages/${file}.md`)
-            .then(response=>response.text())
-            .then(md=>document.getElementById(target).innerHTML = generateHTML(md))
+                .then(response => response.text())
+                .then(md => document.getElementById(target).innerHTML = generateHTML(md))
         }
-        loadMainPanel = () =>{
+        loadMainPanel = () => {
             let endpoint = window.location.hash.slice(2) || 'home'
-            loadMD(endpoint,"mainpanel")
+            loadMD(endpoint, "mainpanel")
         }
         reload = () => {
             loadMainPanel()
-            loadMD('sidebar',"sidebar")
+            loadMD('sidebar', "sidebar")
         }
 
         reload()
@@ -73,6 +88,7 @@
         addEventListener('hashchange', (event) => reload());
 
     </script>
-    
+
 </body>
+
 </html>

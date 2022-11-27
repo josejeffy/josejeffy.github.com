@@ -1,7 +1,9 @@
-# In index.html
+# Relevant snippets
+=
+# To handle endpoints
 
 ! indexHTMLScript.JPG
 
-# In md2html.js
+# To generate HTML from markdown texts
 
 ! md2htmlScript.JPG

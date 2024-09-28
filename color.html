@@ -1,0 +1,195 @@
+<html>
+
+<head>
+    <title>Color Picker</title>
+    <link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css"
+>
+</head>
+
+<body>
+    <main class="container">
+        <input type="file" id="image-upload" accept="image/*">
+        <canvas id="canvas" width="600" height="400"></canvas>
+    </main>
+    <script>
+        function rgbToHsv(r, g, b) {
+            r /= 255;
+            g /= 255;
+            b /= 255;
+            let max = Math.max(r, g, b);
+            let min = Math.min(r, g, b);
+            let delta = max - min;
+            let h = 0;
+            let s = 0;
+            let v = max;
+
+            if (delta !== 0) {
+                s = delta / max;
+                let dr = ((max - r) / 6) + (delta / 2);
+                let dg = ((max - g) / 6) + (delta / 2);
+                let db = ((max - b) / 6) + (delta / 2);
+                dr /= delta;
+                dg /= delta;
+                db /= delta;
+
+                if (r === max) {
+                    h = db - dg;
+                } else if (g === max) {
+                    h = (1 / 3) + dr - db;
+                } else if (b === max) {
+                    h = (2 / 3) + dg - dr;
+                }
+
+                if (h < 0) {
+                    h += 1;
+                }
+                if (h > 1) {
+                    h -= 1;
+                }
+            }
+
+            return [h, s, v];
+        }
+
+        function hsvToRgb(h, s, v) {
+            let r = 0;
+            let g = 0;
+            let b = 0;
+            let i = Math.floor(h * 6);
+            let f = h * 6 - i;
+            let p = v * (1 - s);
+            let q = v * (1 - f * s);
+            let t = v * (1 - (1 - f) * s);
+
+            switch (i % 6) {
+                case 0:
+                    r = v;
+                    g = t;
+                    b = p;
+                    break;
+                case 1:
+                    r = q;
+                    g = v;
+                    b = p;
+                    break;
+                case 2:
+                    r = p;
+                    g = v;
+                    b = t;
+                    break;
+                case 3:
+                    r = p;
+                    g = q;
+                    b = v;
+                    break;
+                case 4:
+                    r = t;
+                    g = p;
+                    b = v;
+                    break;
+                case 5:
+                    r = v;
+                    g = p;
+                    b = q;
+                    break;
+            }
+
+            return [Math.floor(r * 255), Math.floor(g * 255), Math.floor(b * 255)];
+        }
+
+        function complementaryColor(r, g, b) {
+            let hsv = rgbToHsv(r, g, b);
+            hsv[0] += 0.5;
+            if (hsv[0] > 1) {
+                hsv[0] -= 1;
+            }
+            return hsvToRgb(hsv[0], hsv[1], hsv[2]);
+        }
+
+        function analogousColors(r, g, b) {
+            let hsv = rgbToHsv(r, g, b);
+            let analogous1 = hsvToRgb(hsv[0] - 0.1, hsv[1], hsv[2]);
+            let analogous2 = hsvToRgb(hsv[0] + 0.1, hsv[1], hsv[2]);
+            return [analogous1, analogous2];
+        }
+
+
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        const imageUpload = document.getElementById('image-upload');
+
+        let image;
+        let colors = [];
+        let r, g, b;
+
+        
+        imageUpload.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                image = new Image();
+                image.onload = () => {
+                    canvas.width = image.width;
+                    canvas.height = image.height;
+                    ctx.drawImage(image, 0, 0);
+                };
+                image.src = event.target.result;
+            };
+            reader.readAsDataURL(file);
+        });
+
+        
+        canvas.addEventListener('click', (e) => {
+            const x = e.offsetX;
+            const y = e.offsetY;
+            const neighborhoodSize = 10; 
+            const pixelData = ctx.getImageData(x - neighborhoodSize / 2, y - neighborhoodSize / 2, neighborhoodSize, neighborhoodSize).data;
+            let r = 0, g = 0, b = 0, count = 0;
+
+            
+            for (let i = 0; i < pixelData.length; i += 4) {
+                r += pixelData[i];
+                g += pixelData[i + 1];
+                b += pixelData[i + 2];
+                count++;
+            }
+
+            r = Math.floor(r / count);
+            g = Math.floor(g / count);
+            b = Math.floor(b / count);
+
+            complementary = complementaryColor(r, g, b);
+            analogous = analogousColors(r, g, b);
+
+            
+            colors = [
+                { r, g, b }, 
+                { r: complementary[0], g: complementary[1], b: complementary[2] }, 
+                { r: analogous[0][0], g: analogous[0][1], b: analogous[0][2] }, 
+                { r: analogous[1][0], g: analogous[1][1], b: analogous[1][2] }, 
+            ];
+
+            
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.drawImage(image, 0, 0);
+            colors.forEach((color, index) => {
+                ctx.fillStyle = `rgb(${color.r}, ${color.g}, ${color.b})`;
+                ctx.fillRect(index * 200, canvas.height - 200, 200, 200); 
+            });
+
+            texts = ["Selected", "Complementary", "Analogous 1", "Analogous 2"]
+            ctx.font = '24px Arial';
+            ctx.fillStyle = 'black';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'top';
+            colors.forEach((color, index) => {
+                const text = texts[index];
+                ctx.fillText(text, index * 200 + 100, canvas.height - 250);
+            });
+        });
+    </script>
+</body>
+
+</html>
